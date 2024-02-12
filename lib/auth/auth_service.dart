@@ -11,17 +11,28 @@ class AuthService {
           email: email, password: password);
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      print(e.code);
+      if (e.code == 'auth/invalid-credential') {
         throw Exception('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
+      } else if (e.code == 'auth/invalid-password') {
         throw Exception('Wrong password provided for that user.');
-      }else {
-        throw Exception('Something went wrong');
+      } else {
+        throw Exception(e.message?.split(":").last.trim());
       }
     }
   }
 
   //register
+  Future<UserCredential> register(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
 
   //logout
   Future<void> logout() async {
