@@ -6,8 +6,8 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   void logout() {
-    final _auth = AuthService();
-    _auth.logout();
+    final auth = AuthService();
+    auth.logout();
   }
 
   @override
