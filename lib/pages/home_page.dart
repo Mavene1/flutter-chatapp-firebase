@@ -1,12 +1,13 @@
 import 'package:chatapp/auth/auth_service.dart';
+import 'package:chatapp/components/my_drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   void logout() {
-    final auth = AuthService();
-    auth.logout();
+    final _auth = AuthService();
+    _auth.logout();
   }
 
   @override
@@ -18,6 +19,6 @@ class HomePage extends StatelessWidget {
             IconButton(icon: const Icon(Icons.logout), onPressed: logout)
           ],
         ),
-        drawer: const Drawer());
+        drawer: const MyDrawer());
   }
 }
