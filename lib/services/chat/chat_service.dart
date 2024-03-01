@@ -34,10 +34,7 @@ class ChatService {
     );
 
     //construct chatroom id for the two users
-    List<String> chatRoomIDs = [
-      currentUserID,
-      receiverID
-    ];
+    List<String> chatRoomIDs = [currentUserID, receiverID];
     //sort the list
     chatRoomIDs.sort();
     //create chatroom
@@ -47,16 +44,12 @@ class ChatService {
         .doc(chatRoomIDs.join("_"))
         .collection("Messages")
         .add(newMessage.toMap());
+  }
 
-    
-
-    //get messages
-    // ignore: unused_element
-    Stream<QuerySnapshot> getMessages(String userID, otherUserID) {
-      List<String> chatRoomIDs = [
-      userID,
-      otherUserID
-    ];
+  //get messages
+  // ignore: unused_element
+  Stream<QuerySnapshot> getMessages(String userID, otherUserID) {
+    List<String> chatRoomIDs = [userID, otherUserID];
     //sort the list
     chatRoomIDs.sort();
     //create chatroom
@@ -66,9 +59,5 @@ class ChatService {
         .collection("Messages")
         .orderBy("timestamp", descending: false)
         .snapshots();
-    }
-    
   }
-
-  
 }
