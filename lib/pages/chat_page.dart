@@ -1,3 +1,4 @@
+import 'package:chatapp/components/chat_bubble.dart';
 import 'package:chatapp/services/auth/auth_service.dart';
 import 'package:chatapp/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,7 +30,11 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
+        elevation: 0,
         title: Text(receiverEMail),
       ),
       body: Column(
@@ -71,12 +76,25 @@ class ChatPage extends StatelessWidget {
   Widget _buildMessageListItem(DocumentSnapshot doc) {
     //get message data
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Text(data["message"]);
+    bool isCurrentUser = data["senderID"] == _authService.currentUser()!.uid;
+    var alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+    var margin = isCurrentUser
+        ? const EdgeInsets.only(left: 50.0, right: 16.0)
+        : const EdgeInsets.only(left: 16.0, right: 50.0);
+
+    return Container(
+        alignment: alignment,
+        margin: margin,
+        child: ChatBubble(
+          message: data["message"],
+          isCurrentUser: isCurrentUser,
+        ));
   }
 
   Widget _buildUserInput() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(bottom: 30.0, right: 20.0),
       child: Row(
         children: [
           //message input
@@ -88,11 +106,18 @@ class ChatPage extends StatelessWidget {
             ),
           ),
           //send button
-          IconButton(
-              onPressed: () {
-                sendMessage();
-              },
-              icon: const Icon(Icons.arrow_upward))
+          Container(
+            decoration: const BoxDecoration(
+                color: Colors.green, shape: BoxShape.circle),
+            child: IconButton(
+                onPressed: () {
+                  sendMessage();
+                },
+                icon: const Icon(
+                  Icons.arrow_upward,
+                  color: Colors.white,
+                )),
+          )
         ],
       ),
     );
